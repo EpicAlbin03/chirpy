@@ -16,4 +16,9 @@ async function getUserById(id: string) {
   return result
 }
 
-export { createUser, deleteUsers, getUserById }
+async function getUserByEmail(email: string) {
+  const [result] = await db.select().from(users).where(eq(users.email, email))
+  return result
+}
+
+export { createUser, deleteUsers, getUserById, getUserByEmail }

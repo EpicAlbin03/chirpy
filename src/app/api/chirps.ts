@@ -1,7 +1,9 @@
 import { Request, Response } from "express"
 import { respondWithJSON } from "./json.js"
-import { BadRequestError, NotFoundError } from "../middleware/errors.js"
+import { BadRequestError, NotFoundError, UnauthorizedError } from "../middleware/errors.js"
 import { createChirp, getChirp, getChirps } from "../../db/queries/chirps.js"
+import { getBearerToken, validateJWT } from "../../auth.js"
+import { config } from "../../config.js"
 
 async function handlerGetChirps(req: Request, res: Response) {
   const chirps = await getChirps()
@@ -21,14 +23,16 @@ async function handlerGetChirp(req: Request, res: Response) {
 async function handlerCreateChirp(req: Request, res: Response) {
   type Params = {
     body: string
-    userId: string
   }
 
   let params = req.body as Params
 
-  if (!params.userId || !params.body) {
+  if (!params.body) {
     throw new BadRequestError("Missing required fields")
   }
+
+  const token = getBearerToken(req)
+  const userId = validateJWT(token, config.jwt.secret)
 
   const maxChirpLength = 140
   if (params.body.length > maxChirpLength) {
@@ -43,7 +47,7 @@ async function handlerCreateChirp(req: Request, res: Response) {
 
   const chirp = await createChirp({
     body: params.body,
-    userId: params.userId,
+    userId: userId,
   })
 
   respondWithJSON(res, 201, chirp)

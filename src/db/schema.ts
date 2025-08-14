@@ -1,4 +1,4 @@
-import { pgTable, timestamp, varchar, uuid, text } from "drizzle-orm/pg-core"
+import { pgTable, timestamp, varchar, uuid } from "drizzle-orm/pg-core"
 
 type User = typeof users.$inferSelect
 type NewUser = typeof users.$inferInsert
@@ -10,6 +10,7 @@ const users = pgTable("users", {
     .defaultNow()
     .$onUpdate(() => new Date()),
   email: varchar("email", { length: 256 }).unique().notNull(),
+  hashedPassword: varchar("hashed_password", { length: 256 }).notNull().default("unset"),
 })
 
 type Chirp = typeof chirps.$inferSelect
@@ -21,11 +22,30 @@ const chirps = pgTable("chirps", {
     .notNull()
     .defaultNow()
     .$onUpdate(() => new Date()),
-  body: text("body").notNull(),
-  userId: uuid("user_id").references(() => users.id, {
-    onDelete: "cascade",
-  }),
+  body: varchar("body", { length: 256 }).notNull(),
+  userId: uuid("user_id")
+    .references(() => users.id, {
+      onDelete: "cascade",
+    })
+    .notNull(),
 })
 
-export type { NewUser, User, NewChirp, Chirp }
-export { users, chirps }
+type RefreshToken = typeof refreshTokens.$inferSelect
+const refreshTokens = pgTable("refresh_tokens", {
+  token: varchar("token", { length: 256 }).primaryKey(),
+  createdAt: timestamp("created_at").notNull().defaultNow(),
+  updatedAt: timestamp("updated_at")
+    .notNull()
+    .defaultNow()
+    .$onUpdate(() => new Date()),
+  userId: uuid("user_id")
+    .references(() => users.id, {
+      onDelete: "cascade",
+    })
+    .notNull(),
+  expiresAt: timestamp("expires_at").notNull(),
+  revokedAt: timestamp("revoked_at"),
+})
+
+export type { NewUser, User, NewChirp, Chirp, RefreshToken }
+export { users, chirps, refreshTokens }

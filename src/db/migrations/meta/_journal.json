@@ -15,6 +15,27 @@
       "when": 1755179880228,
       "tag": "0001_motionless_sunfire",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1755182583861,
+      "tag": "0002_mysterious_ken_ellis",
+      "breakpoints": true
+    },
+    {
+      "idx": 3,
+      "version": "7",
+      "when": 1755190598842,
+      "tag": "0003_slow_bucky",
+      "breakpoints": true
+    },
+    {
+      "idx": 4,
+      "version": "7",
+      "when": 1755192316577,
+      "tag": "0004_true_the_leader",
+      "breakpoints": true
     }
   ]
 }
