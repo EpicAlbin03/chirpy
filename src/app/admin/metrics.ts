@@ -1,7 +1,7 @@
 import { Request, Response } from "express"
 import { config } from "../../config.js"
 
-function handlerMetrics(req: Request, res: Response) {
+async function handlerMetrics(req: Request, res: Response) {
   res.set("Content-Type", "text/html; charset=utf-8")
   const resp = `<html>
   <body>

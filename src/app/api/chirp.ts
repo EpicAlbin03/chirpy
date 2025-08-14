@@ -1,7 +1,8 @@
 import { Request, Response } from "express"
-import { respondWithError, respondWithJSON } from "./json.js"
+import { respondWithJSON } from "./json.js"
+import { BadRequestError } from "../middleware/errors.js"
 
-function handlerValidateChirp(req: Request, res: Response) {
+async function handlerValidateChirp(req: Request, res: Response) {
   type Params = {
     body: string
   }
@@ -10,8 +11,7 @@ function handlerValidateChirp(req: Request, res: Response) {
 
   const maxChirpLength = 140
   if (params.body.length > maxChirpLength) {
-    respondWithError(res, 400, "Chirp is too long")
-    return
+    throw new BadRequestError(`Chirp is too long. Max length is ${maxChirpLength}`)
   }
 
   const profanity = ["kerfuffle", "sharbert", "fornax"]
