@@ -35,9 +35,9 @@ function middlewareErrorHandler(err: Error, req: Request, res: Response, next: N
   } else if (err instanceof NotFoundError) {
     respondWithError(res, 404, err.message)
   } else {
+    console.log(err.message)
     respondWithError(res, 500, "Internal Server Error")
   }
-  next(err)
 }
 
 export { BadRequestError, UnauthorizedError, ForbiddenError, NotFoundError }
