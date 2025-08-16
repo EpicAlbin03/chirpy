@@ -1,12 +1,32 @@
 import { Request, Response } from "express"
 import { respondWithJSON } from "./json.js"
 import { BadRequestError, ForbiddenError, NotFoundError } from "../middleware/errors.js"
-import { createChirp, deleteChirp, getChirp, getChirps } from "../../db/queries/chirps.js"
+import {
+  createChirp,
+  deleteChirp,
+  getChirp,
+  getChirps,
+  getChirpsByAuthorId,
+} from "../../db/queries/chirps.js"
 import { getBearerToken, validateJWT } from "../../auth.js"
 import { config } from "../../config.js"
 
 async function handlerGetChirps(req: Request, res: Response) {
+  const authorId = (req.query.authorId as string) || ""
+  const sort = (req.query.sort as string) || "asc"
+
+  if (authorId) {
+    const chirps = await getChirpsByAuthorId(authorId)
+    respondWithJSON(res, 200, chirps)
+    return
+  }
+
   const chirps = await getChirps()
+
+  if (sort === "desc") {
+    chirps.reverse()
+  }
+
   respondWithJSON(res, 200, chirps)
 }
 

@@ -41,14 +41,14 @@ app.get("/api/healthz", (req, res, next) => {
   Promise.resolve(handlerReadiness(req, res)).catch(next)
 })
 
+app.get("/api/chirps", (req, res, next) => {
+  Promise.resolve(handlerGetChirps(req, res)).catch(next)
+})
 app.get("/api/chirps/:id", (req, res, next) => {
   Promise.resolve(handlerGetChirp(req, res)).catch(next)
 })
 app.post("/api/chirps", (req, res, next) => {
   Promise.resolve(handlerCreateChirp(req, res)).catch(next)
-})
-app.get("/api/chirps", (req, res, next) => {
-  Promise.resolve(handlerGetChirps(req, res)).catch(next)
 })
 app.delete("/api/chirps/:id", (req, res, next) => {
   Promise.resolve(handlerDeleteChirp(req, res)).catch(next)
