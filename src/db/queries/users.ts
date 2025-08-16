@@ -21,4 +21,13 @@ async function getUserByEmail(email: string) {
   return result
 }
 
-export { createUser, deleteUsers, getUserById, getUserByEmail }
+async function updateUser(id: string, email: string, password: string) {
+  const [result] = await db
+    .update(users)
+    .set({ email: email, hashedPassword: password })
+    .where(eq(users.id, id))
+    .returning()
+  return result
+}
+
+export { createUser, deleteUsers, getUserById, getUserByEmail, updateUser }
