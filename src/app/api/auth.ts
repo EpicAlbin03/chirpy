@@ -1,5 +1,5 @@
 import { Request, Response } from "express"
-import { respondWithError, respondWithJSON } from "./json.js"
+import { respondWithJSON } from "./json.js"
 import { getUserByEmail } from "../../db/queries/users.js"
 import { BadRequestError, NotFoundError, UnauthorizedError } from "../middleware/errors.js"
 import { checkPasswordHash, getBearerToken, makeJWT, makeRefreshToken } from "../../auth.js"
@@ -53,6 +53,7 @@ async function handlerLogin(req: Request, res: Response) {
     email: user.email,
     token: accessToken,
     refreshToken,
+    isChirpyRed: user.isChirpyRed,
   } satisfies LoginResponse)
 }
 

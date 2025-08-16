@@ -17,6 +17,7 @@ import { migrate } from "drizzle-orm/postgres-js/migrator"
 import { drizzle } from "drizzle-orm/postgres-js"
 import { handlerCreateUser, handlerUpdateUser } from "./app/api/users.js"
 import { handlerLogin, handlerRefreshToken, handlerRevokeToken } from "./app/api/auth.js"
+import { handlerUpdateUserIsChirpyRed } from "./app/api/polka/webhooks.js"
 
 const migrationClient = postgres(config.db.url, { max: 1 })
 await migrate(drizzle(migrationClient), config.db.migrationConfig)
@@ -68,6 +69,10 @@ app.post("/api/refresh", (req, res, next) => {
 })
 app.post("/api/revoke", (req, res, next) => {
   Promise.resolve(handlerRevokeToken(req, res)).catch(next)
+})
+
+app.post("/api/polka/webhooks", (req, res, next) => {
+  Promise.resolve(handlerUpdateUserIsChirpyRed(req, res)).catch(next)
 })
 
 app.use(middlewareErrorHandler)

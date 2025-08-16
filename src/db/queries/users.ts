@@ -30,4 +30,13 @@ async function updateUser(id: string, email: string, password: string) {
   return result
 }
 
-export { createUser, deleteUsers, getUserById, getUserByEmail, updateUser }
+async function updateUserIsChirpyRed(id: string, isChirpyRed: boolean) {
+  const [result] = await db
+    .update(users)
+    .set({ isChirpyRed: isChirpyRed })
+    .where(eq(users.id, id))
+    .returning()
+  return result
+}
+
+export { createUser, deleteUsers, getUserById, getUserByEmail, updateUser, updateUserIsChirpyRed }

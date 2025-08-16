@@ -1,4 +1,4 @@
-import { pgTable, timestamp, varchar, uuid } from "drizzle-orm/pg-core"
+import { pgTable, timestamp, varchar, uuid, boolean } from "drizzle-orm/pg-core"
 
 type User = typeof users.$inferSelect
 type NewUser = typeof users.$inferInsert
@@ -11,6 +11,7 @@ const users = pgTable("users", {
     .$onUpdate(() => new Date()),
   email: varchar("email", { length: 256 }).unique().notNull(),
   hashedPassword: varchar("hashed_password", { length: 256 }).notNull().default("unset"),
+  isChirpyRed: boolean("is_chirpy_red").notNull().default(false),
 })
 
 type Chirp = typeof chirps.$inferSelect
